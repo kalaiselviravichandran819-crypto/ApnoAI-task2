@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KalaiSelvi R | Profile Card</title>
+
+  <!-- React 18 -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+
+    /* DAY MODE - FULL ORANGE */
+    .light-bg {
+      min-height: 100vh;
+      width: 100%;
+      background: #FF8C00 !important;
+      background-image: none !important;
+      background-attachment: fixed;
+    }
+
+    /* NIGHT MODE - GALAXY VIOLET */
+    .dark-bg {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 20%, #7137C8 0%, transparent 35%),
+        radial-gradient(circle at 85% 80%, #34206E 0%, transparent 35%),
+        linear-gradient(135deg, #160B35, #5424A8, #9B6BDE);
+      background-attachment: fixed;
+      background-size: cover;
+    }
+
+    .glass-light {
+      background: rgba(255, 255, 255, 0.38);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 12px 40px rgba(80, 40, 100, 0.15);
+    }
+
+    .glass-dark {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    /* THEME BUTTON */
+    .theme-button {
+      background: rgba(255,255,255,0.35);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.5);
+      color: #000000;
+    }
+
+    .skill {
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .skill:hover {
+      transform: translateY(-3px);
+    }
+
+    button, a {
+      cursor: pointer;
+    }
+
+    /* ALL PROFILE CARD TEXT BLACK */
+    .profile-card,
+    .profile-card * {
+      color: #000000 !important;
+    }
+
+    .profile-card button,
+    .profile-card a {
+      color: #000000 !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function ProfileCard({
+      name, role, college, bio, skills,
+      avatar, github, linkedin
+    }) {
+
+      const [isDark, setIsDark] = useState(false);
+      const [isConnected, setIsConnected] = useState(false);
+      const [likes, setLikes] = useState(1248);
+      const [isLiked, setIsLiked] = useState(false);
+
+      const toggleTheme = () => {
+        setIsDark(previous => !previous);
+      };
+
+      const toggleConnect = () => {
+        setIsConnected(previous => !previous);
+      };
+
+      const toggleLike = () => {
+        if (isLiked) {
+          setLikes(previous => previous - 1);
+        } else {
+          setLikes(previous => previous + 1);
+        }
+
+        setIsLiked(previous => !previous);
+      };
+
+      return (
+        <div className={`${isDark ? 'dark-bg' : 'light-bg'} min-h-screen w-full flex items-center justify-center p-5 transition-all duration-500`}>
+
+          {/* Theme Button */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="theme-button fixed top-5 right-5 z-50 p-4 rounded-full shadow-lg text-2xl"
+            title="Toggle Day and Night Mode"
+          >
+            {isDark ? "☀️" : "🌙"}
+          </button>
+
+          {/* Profile Card */}
+          <div className={`${isDark ? 'glass-dark' : 'glass-light'} profile-card w-full max-w-md rounded-3xl p-7 text-center transition-all duration-500`}>
+
+            {/* Profile Image */}
+            <div className="flex justify-center mb-5">
+              <img
+                src={avatar}
+                alt={name}
+                className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl"
+              />
+            </div>
+
+            {/* Name */}
+            <h1 className="text-3xl font-bold mb-2">
+              {name}
+            </h1>
+
+            {/* Role */}
+            <h2 className="text-lg font-semibold mb-3">
+              {role}
+            </h2>
+
+            {/* College */}
+            <p className="text-sm font-medium mb-4">
+              🎓 {college}
+            </p>
+
+            {/* Bio */}
+            <p className="text-sm leading-6 mb-6">
+              {bio}
+            </p>
+
+            {/* Skills */}
+            <h3 className="text-xl font-bold mb-4">
+              My Skills
+            </h3>
+
+            <div className="flex flex-wrap justify-center gap-3 mb-7">
+              {skills.map((skill, index) => (
+                <span
+                  key={index}
+                  className="skill bg-white/60 border border-white/70 px-4 py-2 rounded-full text-sm font-semibold shadow-sm"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+
+            {/* Connect Button */}
+            <button
+              type="button"
+              onClick={toggleConnect}
+              className={`w-full py-3 rounded-xl font-bold shadow-md mb-4 transition-all duration-300 ${
+                isConnected
+                  ? 'bg-gray-300'
+                  : 'bg-white/70 hover:bg-white'
+              }`}
+            >
+              {isConnected ? "✓ Connected" : "+ Connect"}
+            </button>
+
+            {/* Like Button */}
+            <button
+              type="button"
+              onClick={toggleLike}
+              className="w-full py-3 rounded-xl font-bold shadow-md bg-white/70 hover:bg-white mb-6 transition-all duration-300"
+            >
+              {isLiked ? "❤️ Liked" : "🤍 Like"} · {likes}
+            </button>
+
+            {/* Social Links */}
+            <div className="flex justify-center gap-6 mt-2">
+              <a
+                href={github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold underline hover:opacity-70"
+              >
+                GitHub
+              </a>
+
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold underline hover:opacity-70"
+              >
+                LinkedIn
+              </a>
+            </div>
+
+            {/* Footer */}
+            <p className="text-xs mt-7 opacity-80">
+              © 2026 {name} | React Profile Card
+            </p>
+
+          </div>
+        </div>
+      );
+    }
+
+    /* PROFILE DATA */
+    function App() {
+
+      const profile = {
+        name: "KalaiSelvi R",
+        role: "Information Technology Student",
+        college: "Chennai Institute of Technology",
+
+        bio: "Aspiring Software Developer | Exploring technology, creating projects and turning ideas into reality. Learning something new every day!",
+
+        skills: [
+          "C",
+          "C++",
+          "Python",
+          "HTML",
+          "CSS",
+          "JavaScript"
+        ],
+
+        avatar: "./profile.jpg",
+
+        github: "https://github.com/kalaiselviravichandran819-crypto",
+
+        linkedin: "https://www.linkedin.com/in/kalai-selvi-321587382"
+      };
+
+      return (
+        <ProfileCard {...profile} />
+      );
+    }
+
+    /* RENDER APP */
+    const root = ReactDOM.createRoot(
+      document.getElementById("root")
+    );
+
+    root.render(<App />);
+  </script>
+</body>
+</html>
